@@ -1,7 +1,8 @@
-import { CoursesModule } from './../courses.module';
-import { CoursesService } from './../services/courses.service';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+
 import { Course } from '../model/course';
+import { CoursesService } from './../services/courses.service';
 
 
 @Component({
@@ -11,7 +12,7 @@ import { Course } from '../model/course';
 })
 export class CoursesComponent {
 
-  courses: Course[] = [];
+  courses: Observable<Course[]>;
   displayedColumns = ['name', 'category'];
 
   constructor(private coursesService: CoursesService){
