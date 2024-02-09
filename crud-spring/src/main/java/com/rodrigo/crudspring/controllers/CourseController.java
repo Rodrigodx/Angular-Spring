@@ -3,10 +3,9 @@ package com.rodrigo.crudspring.controllers;
 import com.rodrigo.crudspring.model.Course;
 import com.rodrigo.crudspring.repositories.CourseRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +19,11 @@ public class CourseController {
     @GetMapping
     public ResponseEntity<List<Course>> findAll(){
         return ResponseEntity.ok(repository.findAll());
+    }
+
+    @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public Course save(@RequestBody Course course){
+        return repository.save(course);
     }
 }
