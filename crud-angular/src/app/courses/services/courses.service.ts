@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { first } from 'rxjs';
 
 import { Course } from '../model/course';
-import {first, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +34,10 @@ export class CoursesService {
     //console.log('create');
     return this.create(record);
   }
+
+    delete(id: string){
+      return this.httpCLient.delete(`${this.API}/${id}`).pipe(first());
+    }
 
   private create(record: Partial<Course>){
     return this.httpCLient.post<Course>(this.API, record).pipe(first());
