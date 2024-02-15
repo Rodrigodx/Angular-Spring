@@ -7,6 +7,7 @@ import { catchError, Observable, of } from 'rxjs';
 import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 import { Course } from '../../model/course';
 import { CoursesService } from '../../services/courses.service';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 
 
@@ -54,18 +55,25 @@ export class CoursesComponent {
   }
 
   onDelete(course: Course){
-    this.coursesService.delete(course._id).subscribe(
-      () => {
-        this.refresh();
-        this.snackBar.open('Curso deletado com sucesso!', 'X', {
-          duration: 3000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center'
-        })
-      },
-      error => this.onError('Error ao tentar deletar curso')
-    );
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: 'Tem certeza que deseja remover este curso?',
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if(result){
+        this.coursesService.delete(course._id).subscribe(
+          () => {
+            this.refresh();
+            this.snackBar.open('Curso deletado com sucesso!', 'X', {
+              duration: 3000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center'
+            })
+          },
+          error => this.onError('Error ao tentar deletar curso')
+        );
+      }
+    });
   }
-
-
 }
