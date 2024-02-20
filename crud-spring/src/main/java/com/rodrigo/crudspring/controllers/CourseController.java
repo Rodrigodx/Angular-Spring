@@ -2,14 +2,17 @@ package com.rodrigo.crudspring.controllers;
 
 import com.rodrigo.crudspring.model.Course;
 import com.rodrigo.crudspring.repositories.CourseRepository;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-
+@Validated
 @RestController
 @RequestMapping (value = "/api/courses")
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class CourseController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Course> findById (@PathVariable Integer id){
+    public ResponseEntity<Course> findById (@PathVariable @NotNull @Positive Integer id){
         return repository.findById(id)
                 .map(recordFound -> ResponseEntity.ok().body(recordFound))
                 .orElse(ResponseEntity.notFound().build());
@@ -31,12 +34,12 @@ public class CourseController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Course save(@RequestBody Course course){
+    public Course save(@RequestBody @Valid Course course){
         return repository.save(course);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Course> updated (@PathVariable Integer id, @RequestBody Course course){
+    public ResponseEntity<Course> updated (@PathVariable @NotNull @Positive Integer id, @RequestBody @Valid Course course){
         return  repository.findById(id).
                 map(recordFound -> {
                     recordFound.setName(course.getName());
@@ -48,7 +51,7 @@ public class CourseController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete (@PathVariable Integer id){
+    public ResponseEntity<Void> delete (@PathVariable @NotNull @Positive Integer id){
         return repository.findById(id).
                 map(recordFound -> {
                     repository.deleteById(id);
