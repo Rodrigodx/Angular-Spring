@@ -1,11 +1,10 @@
 package com.rodrigo.crudspring.controllers;
 
 import com.rodrigo.crudspring.model.Course;
-import com.rodrigo.crudspring.repositories.CourseRepository;
+import com.rodrigo.crudspring.service.CourseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,19 +14,22 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping (value = "/api/courses")
-@RequiredArgsConstructor
 public class CourseController {
 
-    private final CourseRepository repository;
+    private final CourseService courseService;
+
+    public CourseController (CourseService service){
+        courseService = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<Course>> findAll(){
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(courseService.findAll());
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Course> findById (@PathVariable @NotNull @Positive Integer id){
-        return repository.findById(id)
+        return courseService.findById(id)
                 .map(recordFound -> ResponseEntity.ok().body(recordFound))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -35,28 +37,21 @@ public class CourseController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Course save(@RequestBody @Valid Course course){
-        return repository.save(course);
+        return courseService.save(course);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Course> updated (@PathVariable @NotNull @Positive Integer id, @RequestBody @Valid Course course){
-        return  repository.findById(id).
-                map(recordFound -> {
-                    recordFound.setName(course.getName());
-                    recordFound.setCategory(course.getCategory());
-                    Course updated = repository.save(recordFound);
-                    return ResponseEntity.ok().body(updated);
-                })
+        return  courseService.updated(id, course).
+                map(recordFound -> ResponseEntity.ok().body(recordFound))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete (@PathVariable @NotNull @Positive Integer id){
-        return repository.findById(id).
-                map(recordFound -> {
-                    repository.deleteById(id);
-                    return ResponseEntity.noContent().<Void>build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+         if (courseService.delete(id)){
+             return ResponseEntity.noContent().<Void>build();
+         }
+         return ResponseEntity.notFound().build();
     }
 }
