@@ -1,12 +1,11 @@
 package com.rodrigo.crudspring.controllers;
 
-import com.rodrigo.crudspring.model.Course;
+import com.rodrigo.crudspring.dto.CourseDTO;
 import com.rodrigo.crudspring.service.CourseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,23 +22,23 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Course>> findAll(){
-        return ResponseEntity.ok(courseService.findAll());
+    public List<CourseDTO> findAll(){
+        return courseService.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public Course findById (@PathVariable @NotNull @Positive Integer id){
+    public CourseDTO findById (@PathVariable @NotNull @Positive Integer id){
         return courseService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Course save(@RequestBody @Valid Course course){
+    public CourseDTO save(@RequestBody @Valid @NotNull CourseDTO course){
         return courseService.save(course);
     }
 
     @PutMapping(value = "/{id}")
-    public Course updated (@PathVariable @NotNull @Positive Integer id, @RequestBody @Valid Course course){
+    public CourseDTO updated (@PathVariable @NotNull @Positive Integer id, @RequestBody @Valid @NotNull CourseDTO course){
         return courseService.updated(id, course);
     }
 
