@@ -378,12 +378,12 @@ public class CourseService {
         return  courseRepository.findById(id).
                 map(recordFound -> {
                     recordFound.setName(course.name());
-                    recordFound.setCategory(course.category());
+                    recordFound.setCategory(courseMapper.convertCategoryValue(course.category()));
                     return courseMapper.toDTO(courseRepository.save(recordFound));
                 }).orElseThrow(() -> new RecordNotFoundException(id));
     }
 
-    public void delete (@PathVariable @NotNull @Positive Integer id){
+    public void delete (@NotNull @Positive Integer id){
 
         courseRepository.delete(courseRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id)));

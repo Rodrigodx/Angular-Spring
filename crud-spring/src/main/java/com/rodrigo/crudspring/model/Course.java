@@ -1,6 +1,10 @@
 package com.rodrigo.crudspring.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.rodrigo.crudspring.enums.Category;
+import com.rodrigo.crudspring.enums.Status;
+import com.rodrigo.crudspring.enums.convertes.CategoryConverter;
+import com.rodrigo.crudspring.enums.convertes.StatusConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,14 +36,12 @@ public class Course {
     private String name;
 
     @NotNull
-    @Length(max = 10)
-    @Pattern(regexp = "Back-end|Front-end")
     @Column(length = 10, nullable = false)
-    private String category;
+    @Convert(converter = CategoryConverter.class)
+    private Category category;
 
     @NotNull
-    @Length(max = 10)
-    @Pattern(regexp = "Ativo|Inativo")
     @Column(length = 10, nullable = false)
-    private String status = "Ativo";
+    @Convert(converter = StatusConverter.class)
+    private Status status = Status.ACTIVE;
 }
