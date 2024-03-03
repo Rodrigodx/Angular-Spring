@@ -1,9 +1,12 @@
 package com.rodrigo.crudspring.mapper;
 
 import com.rodrigo.crudspring.dto.CourseDTO;
+import com.rodrigo.crudspring.dto.LessonDTO;
 import com.rodrigo.crudspring.enums.Category;
 import com.rodrigo.crudspring.model.Course;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class CourseMapper {
@@ -12,8 +15,11 @@ public class CourseMapper {
         if (course == null){
             return null;
         }
+        List<LessonDTO> lessonDTOS = course.getLessons().stream()
+                .map(lesson -> new LessonDTO(lesson.getId(), lesson.getName(), lesson.getUrl()))
+                .toList();
         return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(),
-                course.getLessons());
+                lessonDTOS);
     }
 
     public Course toEntity(CourseDTO courseDTO){
