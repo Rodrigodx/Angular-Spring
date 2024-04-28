@@ -24,12 +24,14 @@
 
       <mat-toolbar>
         <span>Aulas</span>
-        <button mat-icon-button color="accent">
-          <mat-icon class="mat-18" aria-label="Adicionar uma nova aula">add</mat-icon>
+        <button mat-icon-button color="accent" (click)="AddNewLesson()">
+          <mat-icon class="mat-18" aria-label="Adicionar uma nova aula">add
+
+          </mat-icon>
         </button>
       </mat-toolbar>
 
-      <table style="width: 100%;" formArrayName="lessons" *ngFor="let lesson of getLessonsFormArray() let i = index"><
+      <table style="width: 100%;" formArrayName="lessons" *ngFor="let lesson of getLessonsFormArray() let i = index">
         <tr [formGroupName]="i">
           <td style="width: 65%;">
             <mat-form-field class="full-width">
@@ -44,6 +46,11 @@
               <span matTextPrefix>https://youtu.be/</span>
                 <input matInput formControlName="url">
               </mat-form-field>
+          </td>
+          <td>
+            <button mat-icon-button color="warn" (click)="removeLesson(i)">
+              <mat-icon class="mat-18" aria-label="Deletar uma aula">delete</mat-icon>
+            </button>
           </td>
         </tr>
       </table>

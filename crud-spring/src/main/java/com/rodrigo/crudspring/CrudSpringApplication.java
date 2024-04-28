@@ -21,7 +21,7 @@ public class CrudSpringApplication implements CommandLineRunner {
 
 	public void run(String... args) throws Exception {
 		Course c = new Course();
-		c.setName("Angular");
+		c.setName("Angular e React");
 		c.setCategory(Category.FRONT_END);
 
 		Lesson l = new Lesson();
