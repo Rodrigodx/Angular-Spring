@@ -1,5 +1,4 @@
 <mat-card>
-
   <mat-toolbar color="primary" class="tollbar">Detalhes do curso</mat-toolbar>
 
   <mat-card-content>
@@ -22,6 +21,34 @@
           <mat-option value="back-end">Back-end</mat-option>
         </mat-select>
       </mat-form-field>
+
+      <mat-toolbar>
+        <span>Aulas</span>
+        <button mat-icon-button color="accent">
+          <mat-icon class="mat-18" aria-label="Adicionar uma nova aula">add</mat-icon>
+        </button>
+      </mat-toolbar>
+
+      <table style="width: 100%;" formArrayName="lessons" *ngFor="let lesson of getLessonsFormArray() let i = index"><
+        <tr [formGroupName]="i">
+          <td style="width: 65%;">
+            <mat-form-field class="full-width">
+              <mat-label>Nome da Aula</mat-label>
+                <input matInput formControlName="name">
+              </mat-form-field>
+          </td>
+
+          <td style="width: 30%;">
+            <mat-form-field class="full-width">
+              <mat-label>URL</mat-label>
+              <span matTextPrefix>https://youtu.be/</span>
+                <input matInput formControlName="url">
+              </mat-form-field>
+          </td>
+        </tr>
+      </table>
+
+
     </form>
   </mat-card-content>
 
