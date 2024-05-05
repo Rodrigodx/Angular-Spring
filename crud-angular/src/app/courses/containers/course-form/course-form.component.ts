@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CoursesService } from '../../services/courses.service';
 import { ActivatedRoute } from '@angular/router';
 import { Course } from '../../model/course';
+import { FormUtilsService } from '../../../shared/form/form-utils.service';
 
 @Component({
   selector: 'app-course-form',
@@ -23,6 +24,7 @@ export class CourseFormComponent{
     private snackBar: MatSnackBar,
     private location: Location,
     private route: ActivatedRoute,
+    public formUtils: FormUtilsService
     ){
       const course: Course = this.route.snapshot.data['course'];
 
@@ -61,7 +63,7 @@ export class CourseFormComponent{
 
       url: [lesson.url, [Validators.required,
         Validators.minLength(10),
-        Validators.maxLength(11)]]
+        Validators.maxLength(15)]]
     });
   }
 
@@ -83,7 +85,7 @@ export class CourseFormComponent{
     if (this.form.valid){
       this.service.save(this.form.value).subscribe(result => this.onSuccess(), error => this.onError());
     } else {
-      alert('Form invalido!')
+      this.formUtils.validateAllFormField(this.form);
     }
   }
 
@@ -103,33 +105,6 @@ export class CourseFormComponent{
     this.snackBar.open('Erro ao salvar curso.', '', {
       duration: 3000
     })
-  }
-
-  getErrorMessage(fieldName: string){
-
-    const field = this.form.get(fieldName);
-
-    if (field?.hasError('required')){
-      return 'Campo obrigatório';
-    }
-
-    if (field?.hasError('minlength')){
-      const requiredLength: number = field.errors ? field.errors['minlength']['requiredLength']: 10;
-      return `Tamanho mínimo precisa ser de ${requiredLength}`;
-    }
-
-    if (field?.hasError('maxlength')){
-      const requiredLength: number = field.errors ? field.errors['maxlength']['requiredLength']: 100;
-      return `Tamanho máxido excedido de ${requiredLength} caracteres`;
-    }
-
-    return 'Campo inválido';
-
-  }
-
-  isFormArrayRequired(){
-    const lessons = this.form.get('lessons') as UntypedFormArray;
-    return !lessons.valid && lessons.hasError('required')  && lessons.touched;
   }
 
 }
