@@ -4,6 +4,7 @@ import com.rodrigo.crudspring.dto.CourseDTO;
 import com.rodrigo.crudspring.dto.LessonDTO;
 import com.rodrigo.crudspring.enums.Category;
 import com.rodrigo.crudspring.model.Course;
+import com.rodrigo.crudspring.model.Lesson;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,6 +34,17 @@ public class CourseMapper {
         }
         course.setName(courseDTO.name());
         course.setCategory(convertCategoryValue(courseDTO.category()));
+
+        List<Lesson> lessons = courseDTO.lessons().stream().map(lessonDTO -> {
+            var lesson = new Lesson();
+            //lesson.setId(lessonDTO.id());
+            lesson.setName(lessonDTO.name());
+            lesson.setUrl(lessonDTO.url());
+            lesson.setCourse(course);
+            return lesson;
+        }).toList();
+        course.setLessons(lessons);
+
         return course;
     }
 

@@ -62,7 +62,7 @@ export class CourseFormComponent{
       Validators.maxLength(100)]],
 
       url: [lesson.url, [Validators.required,
-        Validators.minLength(10),
+        Validators.minLength(8),
         Validators.maxLength(15)]]
     });
   }
@@ -71,7 +71,7 @@ export class CourseFormComponent{
     return (<UntypedFormArray>this.form.get('lessons')).controls;
   }
 
-  AddNewLesson(){
+  addNewLesson(){
     const lessons = this.form.get('lessons') as UntypedFormArray;
     lessons.push(this.createLesson());
   }
