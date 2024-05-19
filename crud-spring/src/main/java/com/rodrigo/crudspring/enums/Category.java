@@ -1,8 +1,5 @@
 package com.rodrigo.crudspring.enums;
 
-import lombok.Getter;
-
-@Getter
 public enum Category {
 
     BACK_END("Back-end"),
@@ -12,6 +9,10 @@ public enum Category {
 
     Category(String value){
         this.value = value;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     @Override

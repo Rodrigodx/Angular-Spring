@@ -1,8 +1,5 @@
 package com.rodrigo.crudspring.enums;
 
-import lombok.Getter;
-
-@Getter
 public enum Status {
 
     ACTIVE("Ativo"),
@@ -13,6 +10,11 @@ public enum Status {
     Status(String value){
         this.value = value;
     }
+
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public String toString(){
         return value;
