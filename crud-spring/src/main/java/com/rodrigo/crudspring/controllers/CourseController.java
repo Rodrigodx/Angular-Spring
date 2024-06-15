@@ -1,10 +1,14 @@
 package com.rodrigo.crudspring.controllers;
 
 import com.rodrigo.crudspring.dto.CourseDTO;
+import com.rodrigo.crudspring.dto.CoursePageDTO;
 import com.rodrigo.crudspring.service.CourseService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import org.hibernate.query.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +26,9 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<CourseDTO> findAll(){
-        return courseService.findAll();
+    public CoursePageDTO findAll(@RequestParam(defaultValue = "0") @PositiveOrZero int page,
+                                 @RequestParam(defaultValue = "10") @Positive @Max(100) int pageSize){
+        return courseService.findAll(page, pageSize);
     }
 
     @GetMapping(value = "/{id}")
